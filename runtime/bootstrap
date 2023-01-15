@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -euo pipefail
+
+SCRIPT_DIR=$(cd $(dirname "$0") && pwd)
+
+echo "SCRIPT_DIR: $SCRIPT_DIR"
+echo "FILES: $(find $SCRIPT_DIR)"
+echo "PWD: $(pwd)"
+echo "FILES: $(find .)"
+
+PATH=$SCRIPT_DIR/bin:$PATH
+DISABLE_BUN_ANALYTICS=1
+
+env
+
+bun run $SCRIPT_DIR/index.ts
