@@ -1,11 +1,10 @@
 {
-	"name": "buntime",
+	"name": "@buntime/examples",
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"prettier": "prettier --check index.ts tsconfig.json package.json README.md bootstrap",
-		"prettier:fix": "bun prettier --write",
-		"tc": "tsc --noEmit"
+		"prettier": "prettier --check local.ts handler.ts tsconfig.json package.json README.md",
+		"prettier:fix": "bun prettier --write"
 	},
 	"prettier": "@lshay/prettier-config",
 	"devDependencies": {
@@ -13,7 +12,6 @@
 		"@types/aws-lambda": "^8.10.109",
 		"aws-lambda": "^1.0.7",
 		"bun-types": "^0.4.0",
-		"prettier": "^2.8.3",
-		"typescript": "^4.9.4"
+		"prettier": "^2.8.3"
 	}
 }

@@ -12,5 +12,5 @@ VERSION="${1}"
 
 rm -rf build
 
-./scripts/build-layer.sh "${VERSION}" x64
-./scripts/build-layer.sh "${VERSION}" aarch64
+./scripts/build-layer.sh "${VERSION}" x86_64
+./scripts/build-layer.sh "${VERSION}" arm64

@@ -14,9 +14,9 @@ This exposes the same API as the Node.js runtime. If you are looking how to hand
 This is currently a manual process that we are looking to automate in the future.
 
 1. Clone or fork this repository
-2. 
+2. Run `./scripts/build-and-publish-layers.sh <BUN_VERSION>`
 
-## Example
+## Example lambda handler
 
 ```ts
 import type {
@@ -42,6 +42,10 @@ export default {
 ```
 
 ## Tips
+
+### Testing locally
+
+An example can be found in <`./examples/local.ts`>. In this example, it imports the handler from <`./examples/handler.ts`> and calls it in a simple HTTP server.
 
 ### Getting the trace id
 

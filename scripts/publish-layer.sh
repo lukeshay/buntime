@@ -14,7 +14,6 @@ VERSION="${1}"
 ARCH="${2}"
 LINUX="${3}"
 
-ZIP_ARCH="x64"
 RUNTIME="provided"
 NAME_VERSION="$(echo "${VERSION}" | sed 's/\./_/g')"
 
@@ -22,10 +21,6 @@ if [[ "${LINUX}" == "al2" ]]; then
   RUNTIME="provided.al2"
 fi
 
-if [[ "${ARCH}" == "arm64" ]]; then
-  ZIP_ARCH="aarch64"
-fi
-
 echo "Publishing layer for bun v${VERSION} for ${LINUX} ${ARCH}"
 
-aws lambda publish-layer-version --compatible-runtimes "${RUNTIME}" --output text --compatible-architectures "${ARCH}" --layer-name "Buntime-${ARCH}-${LINUX}-v${NAME_VERSION}" --zip-file "fileb://build/layer-v${VERSION}-${ZIP_ARCH}.zip" | cat
+aws lambda publish-layer-version --compatible-runtimes "${RUNTIME}" --output text --compatible-architectures "${ARCH}" --layer-name "Buntime-${ARCH}-${LINUX}-v${NAME_VERSION}" --zip-file "fileb://build/layer-v${VERSION}-${ARCH}.zip" | cat

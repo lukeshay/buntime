@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        script:
+          - prettier
+          - tc
+    steps:
+      - uses: actions/checkout@v3
+      - uses: xhyrom/setup-bun@v0.1.6
+        with:
+          bun-version: latest
+      - uses: actions/setup-node@v3
+        with:
+          node-version: latest
+      - run: |
+          cd runtime
+          bun install
+          bun ${{ matrix.script }}
+  package:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        version:
+          - 0.3.0
+          - 0.4.0
+    steps:
+      - uses: actions/checkout@v3
+      - run: ./scripts/build-layers.sh ${{ matrix.version }}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: layers
+          path: build
