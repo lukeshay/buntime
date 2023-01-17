@@ -38,5 +38,9 @@ jobs:
       - run: ./scripts/build-layers.sh ${{ matrix.version }}
       - uses: actions/upload-artifact@v3
         with:
-          name: layers
-          path: build
+          name: layer-v${{ matrix.version }}-arm64.zip
+          path: build/layer-v${{ matrix.version }}-arm64.zip
+      - uses: actions/upload-artifact@v3
+        with:
+          name: layer-v${{ matrix.version }}-x86_64.zip
+          path: build/layer-v${{ matrix.version }}-x86_64.zip
