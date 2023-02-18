@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       bun_version:
-        description: The version of Bun.
+        description: The version of Bun (e.g. 0.4.0).
         required: true
         type: string
       architecture:
@@ -17,13 +17,22 @@ on:
         type: choice
       aws_region:
         default: us-east-1
-        description: The AWS region to publish the lambda to
+        description: The AWS region to publish the lambda to.
         required: true
         type: string
+      os:
+        default: al2
+        description: The AWS lambda operating system to publish for.
+        options:
+          - al1
+          - al2
+        required: true
+        type: choice
 
 jobs:
   publish:
     runs-on: ubuntu-22.04
+    name: Publish Buntime-${{ inputs.architecture }}-${{ inputs.os }}-v${{ inputs.bun_version }}
     steps:
       - uses: actions/checkout@v3
       - uses: xhyrom/setup-bun@v0.1.6
@@ -38,6 +47,4 @@ jobs:
           cd runtime
           bun install
       - run: ./scripts/build-layer.sh ${{ inputs.bun_version }} ${{ inputs.architecture }}
-      - run: |
-          ./scripts/publish-layer.sh ${{ inputs.bun_version }} ${{ inputs.architecture }} al1
-          ./scripts/publish-layer.sh ${{ inputs.bun_version }} ${{ inputs.architecture }} al2
+      - run: ./scripts/publish-layer.sh ${{ inputs.bun_version }} ${{ inputs.architecture }} ${{ inputs.os }}
