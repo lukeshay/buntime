@@ -11,10 +11,17 @@ This exposes the same API as the Node.js runtime. If you are looking how to hand
 
 ## Getting Started
 
-This is currently a manual process that we are looking to automate in the future.
+### Prerequisites
+
+Add these secrets to the repository. They must have access to publish lambda layers:
+
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
 
 1. Clone or fork this repository
-2. Run `./scripts/build-and-publish-layers.sh <BUN_VERSION>`
+2. Go to the Actions tab
+3. Select the action name `Publish Layer`
+4. Run the workflow with your desired parameters
 
 ## Example lambda handler
 
