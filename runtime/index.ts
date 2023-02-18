@@ -34,6 +34,8 @@ const buildContext = (next: Response, requestId: string): Context => {
 
 	process.env._X_AMZN_TRACE_ID = traceId;
 
+	const deadline = Number(next.headers.get("lambda-runtime-deadline-ms") ?? Date.now() + 60_000);
+
 	return {
 		functionName: String(Bun.env.AWS_LAMBDA_FUNCTION_NAME),
 		functionVersion: String(Bun.env.AWS_LAMBDA_FUNCTION_VERSION),
@@ -44,7 +46,7 @@ const buildContext = (next: Response, requestId: string): Context => {
 		logStreamName: String(Bun.env.AWS_LAMBDA_LOG_STREAM_NAME),
 		identity: tryJson(next.headers, "lambda-runtime-cognito-identity"),
 		clientContext: tryJson(next.headers, "lambda-runtime-client-context"),
-		getRemainingTimeInMillis: () => Number(next.headers.get("lambda-runtime-deadline-ms")) - Date.now(),
+		getRemainingTimeInMillis: () => deadline - Date.now(),
 		callbackWaitsForEmptyEventLoop: true,
 		done: notImplemented,
 		fail: notImplemented,
@@ -70,7 +72,12 @@ while (true) {
 	let res: Response;
 
 	try {
-		const body = await handler(event, context);
+		const remainingTimeMs = context.getRemainingTimeInMillis();
+
+		const body = await Promise.race([
+			new Promise((resolve) => setTimeout(resolve, remainingTimeMs)),
+			handler(event, context),
+		]);
 
 		log("Sending body:", body);
 

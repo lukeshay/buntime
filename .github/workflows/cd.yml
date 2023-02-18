@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  workflow_dispatch:
+    input:
+      bun_version:
+        description: The version of Bun.
+        required: true
+        type: string
+      architecture:
+        default: x86_64
+        description: The CPU architecture the runtime is for.
+        options:
+          - x86_64
+          - arm64
+        required: true
+        type: choice
+      aws_region:
+        default: us-east-1
+        description: The AWS region to publish the lambda to
+        required: true
+        type: string
+    secrets:
+      aws_secret_access_key:
+        description: The AWS secret access key
+        required: true
+        type: string
+      aws_access_key_id:
+        description: The AWS access key id
+        required: true
+        type: string
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: xhyrom/setup-bun@v0.1.6
+        with:
+          bun-version: latest
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.aws_access_key_id }}
+          aws-region: ${{ secrets.aws_region }}
+          aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
+      - run: |
+          cd runtime
+          bun install
+      - run: ./scripts/build-layer.sh ${{ env.bun_version }} ${{ env.architecture }}
+      - run: |
+          ./scripts/publish-layer.sh ${{ env.bun_version }} ${{ env.architecture }} al1
+          ./scripts/publish-layer.sh ${{ env.bun_version }} ${{ env.architecture }} al2
