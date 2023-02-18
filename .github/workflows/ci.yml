@@ -16,12 +16,9 @@ jobs:
           - tc
     steps:
       - uses: actions/checkout@v3
-      - uses: xhyrom/setup-bun@v0.1.6
+      - uses: xhyrom/setup-bun@v0.1.8
         with:
           bun-version: latest
-      - uses: actions/setup-node@v3
-        with:
-          node-version: latest
       - run: |
           cd runtime
           bun install
