@@ -1,3 +1,5 @@
+# USE https://github.com/oven-sh/bun/tree/main/packages/bun-lambda
+
 # Buntime
 
 An AWS Lambda runtime for [Bun](https://bun.sh/)
